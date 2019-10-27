@@ -7,6 +7,7 @@ import (
 	"rest_api/initialization"
 	"rest_api/keys"
 	"rest_api/routes"
+	"time"
 
 	"github.com/gorilla/handlers"
 )
@@ -23,6 +24,13 @@ func init() {
 }
 
 func main() {
+	srv := &http.Server{
+		Addr:         port,
+		Handler:      handlers.CORS()(routes.InitRouters()),
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 20 * time.Second,
+	}
+
 	log.Println("🆙 Server listening on port", port)
-	http.ListenAndServe(port, handlers.CORS()(routes.InitRouters()))
+	srv.ListenAndServe()
 }
