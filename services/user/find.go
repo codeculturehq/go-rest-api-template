@@ -1,26 +1,22 @@
-package userservices
+package user
 
 import (
 	"context"
+	"go-rest-api-template/libs/mongodb"
+	"go-rest-api-template/models"
 	"log"
-	"rest_api/libs/mongodb"
-	"rest_api/models"
 
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-/*
-	Finds and returns all documents of the users collection
-	that match the given filter.
-*/
+// Find finds and returns all documents of the users collection that match the given filter.
 func Find(filter bson.M) ([]*models.User, error) {
 	var users []*models.User
 
 	collection := mongodb.GetClient().Collection("users")
 	cur, err := collection.Find(context.TODO(), filter)
-
 	if err != nil {
-		log.Fatal("Failed to query user collection with error:", err)
+		log.Fatal("Failed to query user collection with error:", err.Error())
 		return users, err
 	}
 
@@ -28,9 +24,8 @@ func Find(filter bson.M) ([]*models.User, error) {
 		var user models.User
 
 		err = cur.Decode(&user)
-
 		if err != nil {
-			log.Fatal("Failed to decode user with error:", err)
+			log.Fatal("Failed to decode user with error:", err.Error())
 			return users, err
 		}
 

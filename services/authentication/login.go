@@ -1,21 +1,17 @@
-package authservices
+package authentication
 
 import (
 	"errors"
-	"rest_api/models"
-	userservices "rest_api/services/users"
+	"go-rest-api-template/models"
+	"go-rest-api-template/services/user"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/crypto/bcrypt"
 )
 
-/*
-	Checks if the user with the given email exists and
-	verifies the given password.
-*/
+// Login checks if the user with the given email exists and verifies the given password.
 func Login(userData models.User) (string, error) {
-	user, err := userservices.FindOne(bson.M{"email": userData.Email})
-
+	user, err := user.FindOne(bson.M{"email": userData.Email})
 	if err != nil {
 		return "", err
 	}
@@ -25,7 +21,6 @@ func Login(userData models.User) (string, error) {
 	}
 
 	jwt, err := GenerateJwt(string(user.ID.Hex()))
-
 	if err != nil {
 		return "", err
 	}

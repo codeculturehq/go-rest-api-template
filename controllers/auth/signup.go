@@ -1,16 +1,14 @@
-package authroutes
+package auth
 
 import (
 	"encoding/json"
+	"go-rest-api-template/models"
+	"go-rest-api-template/services/authentication"
+	"go-rest-api-template/utils"
 	"net/http"
-	"rest_api/models"
-	authservices "rest_api/services/auth"
-	"rest_api/utils"
 )
 
-/*
-	Handler for the "/signup" route.
-*/
+// SignUp handles the sign up of new users.
 func SignUp(w http.ResponseWriter, r *http.Request) {
 	var jwt models.Jwt
 	var user models.User
@@ -61,8 +59,7 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := authservices.SignUp(user)
-
+	token, err := authentication.SignUp(user)
 	if err != nil {
 		errorResponse.Code = http.StatusBadRequest
 		errorResponse.Message = err.Error()
@@ -74,5 +71,5 @@ func SignUp(w http.ResponseWriter, r *http.Request) {
 
 	jwt.Token = token
 
-	utils.SendJson(w, jwt)
+	utils.SendJSON(w, jwt)
 }

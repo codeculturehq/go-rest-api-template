@@ -2,11 +2,11 @@ package main
 
 import (
 	"fmt"
+	"go-rest-api-template/initialization"
+	"go-rest-api-template/keys"
+	"go-rest-api-template/routes"
 	"log"
 	"net/http"
-	"rest_api/initialization"
-	"rest_api/keys"
-	"rest_api/routes"
 	"time"
 
 	"github.com/gorilla/handlers"
@@ -14,10 +14,6 @@ import (
 
 var port = fmt.Sprintf(":%s", keys.GetKeys().PORT)
 
-/*
-	Initializes environment variables and establishes
-	a connection to MongoDB.
-*/
 func init() {
 	initialization.InitEnv()
 	initialization.InitDatabase()

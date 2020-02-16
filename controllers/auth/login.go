@@ -1,16 +1,14 @@
-package authroutes
+package auth
 
 import (
 	"encoding/json"
+	"go-rest-api-template/models"
+	"go-rest-api-template/services/authentication"
+	"go-rest-api-template/utils"
 	"net/http"
-	"rest_api/models"
-	authservices "rest_api/services/auth"
-	"rest_api/utils"
 )
 
-/*
-	Handler for the "/login" route.
-*/
+// Login verifies credentials and creates a JWT.
 func Login(w http.ResponseWriter, r *http.Request) {
 	var user models.User
 	var jwt models.Jwt
@@ -43,8 +41,7 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	token, err := authservices.Login(user)
-
+	token, err := authentication.Login(user)
 	if err != nil {
 		errorResponse.Code = http.StatusBadRequest
 		errorResponse.Message = "Could not login with credentials provided"
@@ -56,5 +53,5 @@ func Login(w http.ResponseWriter, r *http.Request) {
 
 	jwt.Token = token
 
-	utils.SendJson(w, jwt)
+	utils.SendJSON(w, jwt)
 }

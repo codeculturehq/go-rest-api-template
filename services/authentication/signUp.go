@@ -1,22 +1,17 @@
-package authservices
+package authentication
 
 import (
 	"errors"
-	"rest_api/models"
-	userservices "rest_api/services/users"
-
-	"golang.org/x/crypto/bcrypt"
+	"go-rest-api-template/models"
+	"go-rest-api-template/services/user"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"golang.org/x/crypto/bcrypt"
 )
 
-/*
-	Checks if the given email address was used before and stores
-	the new user in the database with the hashed password.
-*/
+// SignUp checks if the given email address was used before and stores the new user in the database with the hashed password.
 func SignUp(newUser models.User) (string, error) {
-	userExists, err := userservices.CheckExistence(bson.M{"email": newUser.Email})
-
+	userExists, err := user.CheckExistence(bson.M{"email": newUser.Email})
 	if err != nil {
 		return "", err
 	}
@@ -26,19 +21,17 @@ func SignUp(newUser models.User) (string, error) {
 	}
 
 	hash, err := bcrypt.GenerateFromPassword([]byte(newUser.Password), 12)
-
 	if err != nil {
 		return "", err
 	}
 
 	newUser.Password = string(hash)
 
-	if _, err := userservices.Create(newUser); err != nil {
+	if _, err := user.Create(newUser); err != nil {
 		return "", err
 	}
 
 	jwt, err := GenerateJwt(string(newUser.ID.Hex()))
-
 	if err != nil {
 		return "", err
 	}

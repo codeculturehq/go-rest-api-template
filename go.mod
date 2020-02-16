@@ -1,4 +1,4 @@
-module rest_api
+module go-rest-api-template
 
 go 1.13
 

@@ -1,9 +1,9 @@
 package keys
 
 import (
+	"go-rest-api-template/models"
 	"log"
 	"os"
-	"rest_api/models"
 	"sync"
 
 	"github.com/joho/godotenv"
@@ -12,10 +12,6 @@ import (
 var instance *models.Keys
 var once sync.Once
 
-/*
-	Loads and returns an environment variable
-	with a given name.
-*/
 func loadEnv(key string) string {
 	if err := godotenv.Load(); err != nil {
 		log.Println(err)
@@ -36,9 +32,7 @@ var envVariables = models.Keys{
 	SECRET:        loadEnv("SECRET"),
 }
 
-/*
-	Returns all environment variables.
-*/
+// GetKeys returns all environment variables.
 func GetKeys() *models.Keys {
 	once.Do(func() {
 		instance = &envVariables

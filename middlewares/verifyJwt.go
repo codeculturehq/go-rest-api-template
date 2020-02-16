@@ -2,18 +2,16 @@ package middlewares
 
 import (
 	"fmt"
+	"go-rest-api-template/keys"
+	"go-rest-api-template/models"
+	"go-rest-api-template/utils"
 	"net/http"
-	"rest_api/keys"
-	"rest_api/models"
-	"rest_api/utils"
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"
 )
 
-/*
-	Middleware to verify JWT's sent as Authorization header.
-*/
+// VerifyJwt verifies JWT's sent as Authorization header.
 func VerifyJwt(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 

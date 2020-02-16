@@ -2,8 +2,8 @@ package mongodb
 
 import (
 	"context"
+	"go-rest-api-template/keys"
 	"log"
-	"rest_api/keys"
 	"time"
 
 	"go.mongodb.org/mongo-driver/mongo"
@@ -13,10 +13,7 @@ import (
 
 var db *mongo.Database
 
-/*
-	Creates a MongoDB client and establishes a connection and
-	assigns a pointer to the database to db.
-*/
+// InitiateDatabase creates a MongoDB client and establishes a connection and assigns a pointer to the database to db.
 func InitiateDatabase() {
 	if db != nil {
 		return
@@ -28,15 +25,13 @@ func InitiateDatabase() {
 		ctx,
 		options.Client().ApplyURI(keys.GetKeys().MONGO_URI),
 	)
-
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal(err.Error())
 	}
 
-	failedConnection := client.Ping(ctx, readpref.Primary())
-
-	if failedConnection != nil {
-		log.Fatal("❌", err)
+	err = client.Ping(ctx, readpref.Primary())
+	if err != nil {
+		log.Fatal("❌", err.Error())
 	}
 
 	log.Println("✅ Connection to MongoDB established")
@@ -44,10 +39,7 @@ func InitiateDatabase() {
 	db = client.Database(keys.GetKeys().MONGO_DB_NAME)
 }
 
-/*
-	Returns a pointer to the MongoDB database that can
-	be used throughout the application.
-*/
+// GetClient returns a pointer to the MongoDB database that can be used throughout the application.
 func GetClient() *mongo.Database {
 	if db != nil {
 		return db
